@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package format="2">
+  <name>humic_rl</name>
+  <version>1.0.0</version>
+  <description>
+    HCIR Lab., The Humic reinforcement learning package
+  </description>
+  <license>Apache 2.0</license>
+  <author email="kyg1552@gmail.com">Kim Young Gi</author>
+  <maintainer email="kyg1552@gmail.com">Kim Young Gi</maintainer>
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>trajectory_msgs</build_depend>
+  <build_depend>control_msgs</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>std_srvs</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>gazebo_msgs</build_depend>
+  <build_depend>cv_bridge</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>trajectory_msgs</exec_depend>
+  <exec_depend>control_msgs</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>std_srvs</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>gazebo_msgs</exec_depend>
+  <exec_depend>cv_bridge</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+</package>

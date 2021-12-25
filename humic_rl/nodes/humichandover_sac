@@ -1,0 +1,178 @@
+#!/usr/bin/env python3
+# encoding: utf-8
+# -------------------------------
+# Humic Takeover Task
+# Algoritms: SAC
+# Author:  Kim Young Gi(HCIR Lab.)
+# -------------------------------
+
+""" ROS """
+import rospy
+import rospkg
+
+""" python Library """
+import os
+import sys
+import numpy as np
+from datetime import datetime
+import itertools
+import torch
+import random
+
+""" Environment """
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+from src.humic_handover_env import HumicHandoverGazeboEnv
+from src.sac import SAC
+
+from torch.utils.tensorboard import SummaryWriter
+
+seed = 123456
+torch.manual_seed(seed)
+torch.cuda.manual_seed(seed)
+np.random.seed(seed)
+random.seed(seed)
+
+def SACtrain():
+    rospy.init_node('humichandover_sac')
+
+    SACdirPath = os.path.join(rospkg.RosPack().get_path('humic_rl'), 'nodes/checkpoint/handover/sac')
+
+    log_file_path = os.path.join(SACdirPath, 'sac_log{}.csv'.format(datetime.now().strftime("%Y-%m-%d-%H-%M")))
+    log_file = open(log_file_path, 'w+')
+    log_file.write('episode,timestep,avg_reward,object,success\n')
+    
+
+    #Tesnorboard
+    writer = SummaryWriter(os.path.join(SACdirPath, 'runs/{}_SAC'.format(datetime.now().strftime("%Y-%m-%d_%H-%M"))))
+    
+    env = HumicHandoverGazeboEnv()
+    
+    obs_dim = env.observation_dim
+    fullstate_dim = env.fullstate_dim
+    action_dim = env.action_dim
+    
+    action_scale = env.action_space['action_scale']
+    action_bias = env.action_space['action_bias']
+    action_div = env.action_space['action_div']
+    
+    gamma=0.99
+    tau=0.005
+    lr=0.0003
+    target_update_interval=1
+    replay_size=int(1e6)
+    batch_size=256
+    
+    agent = SAC(
+        obs_dim=obs_dim,
+        fullstate_dim=fullstate_dim,  
+        action_dim=action_dim, 
+        action_scale=action_scale,
+        action_bias=action_bias,
+        action_div=action_div,
+        gamma=gamma,
+        tau=tau,
+        lr=lr,
+        target_update_interval=target_update_interval,
+        replay_size=replay_size,
+        batch_size=batch_size,
+        automatic_entropy_tuning=True
+    )
+
+    max_steps = 1000
+    start_timesteps = 10000
+
+    updates_per_step = 1
+
+    updates = 0
+    total_time_step = 0
+    goal_cnt = np.zeros(100)
+    idx = -1
+    success_rate = 0.0
+    epoch = 0
+
+    change_obj = False
+    get_goal = False
+
+    for i_episode in itertools.count(1):
+
+        # training    
+        if change_obj:
+            state = env.reset(change_obj_pose=True)
+            change_obj = False
+        else:
+            state = env.reset(change_obj_pose=False)
+
+        done = False
+
+        epi_rewards = []
+
+        idx += 1
+
+        epi_time_step = 0
+
+        while not done:
+            epi_time_step += 1
+            total_time_step += 1
+
+            if total_time_step > start_timesteps:
+                action = agent.select_action(state['observation'])
+            else:
+                action = env.action_sample()
+
+            next_state, reward, done, get_goal = env.step(action)
+
+            if get_goal:
+                print("Goal !!! ")
+                goal_cnt[idx] = 1
+
+            agent.memory.add(state, action, next_state, reward, done)
+            
+            epi_rewards.append(reward)
+
+            if total_time_step > start_timesteps:
+                for _ in range(updates_per_step):
+                    alpha = agent.update_parameters(updates)
+                    updates += 1
+
+                    writer.add_scalar('train/alpha', alpha, updates)
+                    
+            state = next_state
+                    
+            if epi_time_step % max_steps == 0:
+                done = True
+
+        epi_avg_reward = np.mean(epi_rewards)
+
+        writer.add_scalar('reward/average', epi_avg_reward, i_episode)
+
+        log_file.write('{},{},{},{},{}\n'.format(i_episode, total_time_step, epi_avg_reward, env.query_object.modelName, int(goal_cnt[idx])))
+        log_file.flush()
+
+        print("Episode: {} || Total Steps: {} || avg reward: {} || object: {} || success: {}".format(
+                                                                                        i_episode,
+                                                                                        total_time_step,
+                                                                                        epi_avg_reward, 
+                                                                                        env.query_object.modelName,
+                                                                                        int(goal_cnt[idx])
+        ))
+
+        if i_episode % 100 == 0: # 1 epoch == 100 episode
+            epoch += 1
+            success_rate = np.sum(goal_cnt) * 0.01
+            writer.add_scalar('rate/success', success_rate, epoch)
+            print("success_rate: {}".format(success_rate))
+            
+            idx = -1
+            goal_cnt = np.zeros(100)
+
+            change_obj = True
+
+        if i_episode % 10 == 0:
+            checkpoint_path = os.path.join(SACdirPath, 'pth/ep{}_'.format(i_episode))
+            agent.save(checkpoint_path)
+        
+
+    rospy.spin()
+
+if __name__ == '__main__':
+    SACtrain()
