@@ -1,0 +1,141 @@
+humic:
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 125
+
+  right_arm:
+    type: "position_controllers/JointTrajectoryController"
+    joints:
+      - r_shoulder_joint
+      - r_upperArm_joint
+      - r_elbow_joint
+      - r_foreArm_joint
+      - r_lowerArm_joint
+      - r_wrist_joint
+    
+  r_shoulder_joint:
+    type: position_controllers/JointPositionController
+    joint: r_shoulder_joint
+
+  r_upperArm_joint:
+    type: position_controllers/JointPositionController
+    joint: r_upperArm_joint
+  
+  r_elbow_joint:
+    type: position_controllers/JointPositionController
+    joint: r_elbow_joint
+  
+  r_foreArm_joint:
+    type: position_controllers/JointPositionController
+    joint: r_foreArm_joint
+  
+  r_lowerArm_joint:
+    type: position_controllers/JointPositionController
+    joint: r_lowerArm_joint
+  
+  r_wrist_joint:
+    type: position_controllers/JointPositionController
+    joint: r_wrist_joint
+
+  right_finger1:
+    type: position_controllers/JointPositionController
+    joint: r_finger1_1_joint
+  right_finger2:
+    type: position_controllers/JointPositionController
+    joint: r_finger1_2_joint
+  right_finger3:
+    type: position_controllers/JointPositionController
+    joint: r_finger2_1_joint
+  right_finger4:
+    type: position_controllers/JointPositionController
+    joint: r_finger2_2_joint
+  right_finger5:
+    type: position_controllers/JointPositionController
+    joint: r_finger3_1_joint
+  right_finger6:
+    type: position_controllers/JointPositionController
+    joint: r_finger3_2_joint
+  right_finger7:
+    type: position_controllers/JointPositionController
+    joint: r_finger4_1_joint
+  right_finger8:
+    type: position_controllers/JointPositionController
+    joint: r_finger4_2_joint
+  right_thumb:
+    type: position_controllers/JointPositionController
+    joint: r_thumb_joint
+
+#################################################################################
+  left_arm:
+    type: "position_controllers/JointTrajectoryController"
+    joints:
+      - l_shoulder_joint
+      - l_upperArm_joint
+      - l_elbow_joint
+      - l_foreArm_joint
+      - l_lowerArm_joint
+      - l_wrist_joint
+
+  l_shoulder_joint:
+    type: position_controllers/JointPositionController
+    joint: l_shoulder_joint
+
+  l_upperArm_joint:
+    type: position_controllers/JointPositionController
+    joint: l_upperArm_joint
+  
+  l_elbow_joint:
+    type: position_controllers/JointPositionController
+    joint: l_elbow_joint
+  
+  l_foreArm_joint:
+    type: position_controllers/JointPositionController
+    joint: l_foreArm_joint
+  
+  l_lowerArm_joint:
+    type: position_controllers/JointPositionController
+    joint: l_lowerArm_joint
+  
+  l_wrist_joint:
+    type: position_controllers/JointPositionController
+    joint: l_wrist_joint
+
+  left_finger1:
+    type: position_controllers/JointPositionController
+    joint: l_finger1_1_joint
+  left_finger2:
+    type: position_controllers/JointPositionController
+    joint: l_finger1_2_joint
+  left_finger3:
+    type: position_controllers/JointPositionController
+    joint: l_finger2_1_joint
+  left_finger4:
+    type: position_controllers/JointPositionController
+    joint: l_finger2_2_joint
+  left_finger5:
+    type: position_controllers/JointPositionController
+    joint: l_finger3_1_joint
+  left_finger6:
+    type: position_controllers/JointPositionController
+    joint: l_finger3_2_joint
+  left_finger7:
+    type: position_controllers/JointPositionController
+    joint: l_finger4_1_joint
+  left_finger8:
+    type: position_controllers/JointPositionController
+    joint: l_finger4_2_joint
+  left_thumb:
+    type: position_controllers/JointPositionController
+    joint: l_thumb_joint
+
+# #################################################################################
+  head:
+    type: "position_controllers/JointTrajectoryController"
+    joints:
+      - neck_joint
+      - head_joint
+
+# #################################################################################
+  lift_column:
+    type: "position_controllers/JointPositionController"
+    joint: inner_column_joint

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package format="2">
+  <name>humic_gazebo</name>
+  <version>1.0.0</version>
+  <description>
+    HCIR Lab., The Humic gazebo simulation package
+  </description>
+  <license>Apache 2.0</license>
+  <author email="kyg1552@gmail.com">Kim Young Gi</author>
+  <maintainer email="kyg1552@gmail.com">Kim Young Gi</maintainer>
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>gazebo_ros</build_depend>
+  <build_depend>gazebo</build_depend>
+  <build_depend>controller_manager</build_depend>
+  <build_depend>gazebo_msgs</build_depend>
+  
+  <exec_depend>joint_state_publisher</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>gazebo</exec_depend>
+  <exec_depend>gazebo_ros</exec_depend>
+  <exec_depend>gazebo_msgs</exec_depend>
+  <exec_depend>controller_manager</exec_depend>
+  <export>
+    <gazebo_ros gazebo_media_path="${prefix}"/>
+    <gazebo_ros gazebo_model_path="${prefix}/models"/>
+  </export>
+</package>

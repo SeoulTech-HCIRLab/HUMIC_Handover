@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<sdf version="1.6">
+  <world name="default">
+    
+    <!-- A global light source -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <!-- A ground plane -->
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <!-- <include>
+      <uri>model://lab</uri>
+    </include> -->
+
+    <gui fullscreen='0'>
+        <camera name='user_camera'>
+          <pose> -0.056970 0.003208 4.146917 -0.000003 1.289797 0.006627</pose>
+          <!-- <pose>0.123734 -0.034758 5.605559 -0.000002 1.357799 -0.001369</pose> -->
+          <!-- <pose>-2.912011 0.574361 5.629207 0.000001 0.889799 -0.085369</pose> -->
+          <!-- <pose> -1.720533 0.086008 4.202535  0.000000 0.949799 -0.021371</pose> -->
+          <view_controller>orbit</view_controller>
+        </camera>
+    </gui>
+    <!-- -1.720533 0.086008 4.202535  0.000000 0.949799 -0.021371 -->
+
+    <physics type="ode">
+        <real_time_update_rate>1000.0</real_time_update_rate>
+        <max_step_size>0.001</max_step_size>
+        <!-- <max_step_size>0.002</max_step_size> -->
+        <real_time_factor>1</real_time_factor>
+    </physics>
+  </world>
+</sdf>
