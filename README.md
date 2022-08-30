@@ -1,8 +1,12 @@
 # HUMIC_Handover
 
+## Dependency
+    pip3 install urdf-parser-py
+    
+
 ## How to run
-    $ roslaunch humic_rl humic_handover.launch
-    $ rosrun humic_rl humichandover_sac
+    roslaunch humic_rl humic_handover.launch
+    rosrun humic_rl humichandover_sac
     
 
 ## Networks Architecture
