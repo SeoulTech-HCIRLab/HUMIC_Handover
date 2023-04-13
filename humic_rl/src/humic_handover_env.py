@@ -90,11 +90,11 @@ class HumicHandoverGazeboEnv(object):
         ])
 
         """ State & Action """
-        self.observation_dim = 512 + 14 # depth_image(1x84x84, resized), joint angles(8), ee-position(6)
+        self.observation_dim = 512 + 14 # feature map by resnet18(512), joint angles(8), ee-position(6)
         
         self.fullstate_dim = 8 + 6 + 6 + 2 + 3 # joint angles(8), ee-positions(6), target positions(6), distances(2), box_size(3)
 
-        self.action_dim = 8 # joint angles
+        self.action_dim = 8 # joint angles: left arm(4), right arm(4)
         
         action_shape = (self.action_dim, )
         
